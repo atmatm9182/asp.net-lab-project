@@ -1,0 +1,22 @@
+services:
+  db:
+    build: ./db
+    env_file:
+      - path: ./.env
+        required: true
+    deploy:
+      resources:
+        limits:
+          memory: 4096M
+          cpus: 1.5
+  api:
+    build: ./src
+    ports: 
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_started
+        restart: true
+    env_file:
+      - path: ./.env
+        required: true
